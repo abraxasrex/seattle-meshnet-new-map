@@ -79,7 +79,7 @@ class NodeMarker extends PureComponent {
 		if (type === "supernode")
 			return {
 				icon: {
-					url: "/img/map/supernode.svg",
+					url: "./img/map/supernode.svg",
 					anchor: { x: 14, y: 14 }
 				},
 				zIndex: 100
@@ -88,7 +88,7 @@ class NodeMarker extends PureComponent {
 		if (type === "hub")
 			return {
 				icon: {
-					url: "/img/map/hub.svg",
+					url: "./img/map/hub.svg",
 					anchor: { x: 10, y: 10 }
 				},
 				zIndex: 93
@@ -96,8 +96,8 @@ class NodeMarker extends PureComponent {
 
 		if (type === "omni") {
 			const url = filters.backbone
-				? "/img/map/omni.svg"
-				: "/img/map/active.svg";
+				? "./img/map/omni.svg"
+				: "./img/map/active.svg";
 			const zIndex = filters.backbone ? 92 : 91;
 			return {
 				icon: {
@@ -110,8 +110,8 @@ class NodeMarker extends PureComponent {
 
 		if (type === "remote") {
 			const url = filters.backbone
-				? "/img/map/remote.svg"
-				: "/img/map/active.svg";
+				? "./img/map/remote.svg"
+				: "./img/map/active.svg";
 			const anchor = filters.backbone ? { x: 5, y: 5 } : { x: 7, y: 7 };
 
 			return {
@@ -125,8 +125,8 @@ class NodeMarker extends PureComponent {
 
 		if (type === "kiosk") {
 			const url = filters.backbone
-				? "/img/map/remote.svg"
-				: "/img/map/active.svg";
+				? "./img/map/remote.svg"
+				: "./img/map/active.svg";
 			const anchor = filters.backbone ? { x: 5, y: 5 } : { x: 7, y: 7 };
 
 			return {
@@ -141,7 +141,7 @@ class NodeMarker extends PureComponent {
 		if (type === "active")
 			return {
 				icon: {
-					url: "/img/map/active.svg",
+					url: "./img/map/active.svg",
 					anchor: { x: 7, y: 7 }
 				},
 				zIndex: 91
@@ -150,7 +150,7 @@ class NodeMarker extends PureComponent {
 		if (type === "potential-supernode")
 			return {
 				icon: {
-					url: "/img/map/potential-supernode.svg",
+					url: "./img/map/potential-supernode.svg",
 					anchor: { x: 14, y: 14 }
 				},
 				zIndex: 83
@@ -159,7 +159,7 @@ class NodeMarker extends PureComponent {
 		if (type === "potential-hub")
 			return {
 				icon: {
-					url: "/img/map/potential-hub.svg",
+					url: "./img/map/potential-hub.svg",
 					anchor: { x: 10, y: 10 }
 				},
 				zIndex: 82
