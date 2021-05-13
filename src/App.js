@@ -15,6 +15,8 @@ import rootReducer from "./reducers";
 const store = createStore(rootReducer);
 
 class App extends Component {
+
+
 	render() {
 		return (
 			<DocumentTitle title="Map - NYC Mesh">
