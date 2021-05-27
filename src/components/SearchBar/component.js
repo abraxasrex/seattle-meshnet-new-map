@@ -58,35 +58,7 @@ class SearchBar extends PureComponent {
 		// 3. test build of functionality in the meshnet website
 		// BONUS: draw spreadsheet links from outside static build folder
 		
-			function fetchNodesSheet() {
-				fetch(sheetsNodeData)
-					.then(res => res.json())
-					.then(json => {
-						console.log("success: ", json);
-						const jsonEntries = json.feed.entry;
-
-						let rowMap = {
-							0: "id",
-							1: "status",
-							2: "coordinates",
-							3: "requestDate",
-							4: "installDate",
-							5: "roofAccess",
-							6: "notes",
-							7: "panoramas"
-						};
-
-						let formattedEntries = {};
-
-						jsonEntries.forEach((entryItem, index)=> {
-							formattedEntries[rowMap[index]] = entryItem.content.$t;
-						});
-						console.log("formatted entries: ", formattedEntries);
-					})
-					.catch(err => console.log(err));
-			}
 		
-			fetchNodesSheet();
 	}
 
 	componentWillUnmount() {

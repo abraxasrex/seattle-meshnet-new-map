@@ -3,7 +3,20 @@ import { Marker } from "react-google-maps";
 import Sector from "./Sector";
 
 class NodeMarker extends PureComponent {
+
+	componentDidMount() {
+		//("NODEprops: ", this.props);
+	}
 	render() {
+
+		// images will be in different relation if this is built...
+		const isBuild = false;
+		this.prefix = '';
+	
+		if(isBuild) {
+			this.prefix = '.';
+		}
+
 		const { node, visible, onClick } = this.props;
 		const { notes, coordinates, memberNodes } = node;
 		const [lng, lat] = coordinates;
@@ -13,6 +26,8 @@ class NodeMarker extends PureComponent {
 		const { icon, zIndex } = this.getMarkerProps();
 		const adjustedZ = this.getZIndex(zIndex);
 		const opacity = this.getOpacity();
+		//console.log("icon!: ", icon);
+		//console.log("Props and Node: ", this.props, node);
 		return (
 			<Fragment>
 				<Marker
@@ -75,11 +90,12 @@ class NodeMarker extends PureComponent {
 	getMarkerProps() {
 		const { node, filters } = this.props;
 		const { type } = node;
+	//	console.log("noe detttpye: ", type);
 
 		if (type === "supernode")
 			return {
 				icon: {
-					url: "./img/map/supernode.svg",
+					url: this.prefix + "/img/map/supernode.svg",
 					anchor: { x: 14, y: 14 }
 				},
 				zIndex: 100
@@ -88,7 +104,7 @@ class NodeMarker extends PureComponent {
 		if (type === "hub")
 			return {
 				icon: {
-					url: "./img/map/hub.svg",
+					url: this.prefix + "/img/map/hub.svg",
 					anchor: { x: 10, y: 10 }
 				},
 				zIndex: 93
@@ -96,8 +112,8 @@ class NodeMarker extends PureComponent {
 
 		if (type === "omni") {
 			const url = filters.backbone
-				? "./img/map/omni.svg"
-				: "./img/map/active.svg";
+				? this.prefix + "/img/map/omni.svg"
+				: this.prefix + "/img/map/active.svg";
 			const zIndex = filters.backbone ? 92 : 91;
 			return {
 				icon: {
@@ -110,8 +126,8 @@ class NodeMarker extends PureComponent {
 
 		if (type === "remote") {
 			const url = filters.backbone
-				? "./img/map/remote.svg"
-				: "./img/map/active.svg";
+				? this.prefix + "/img/map/remote.svg"
+				: this.prefix + "/img/map/active.svg";
 			const anchor = filters.backbone ? { x: 5, y: 5 } : { x: 7, y: 7 };
 
 			return {
@@ -125,8 +141,8 @@ class NodeMarker extends PureComponent {
 
 		if (type === "kiosk") {
 			const url = filters.backbone
-				? "./img/map/remote.svg"
-				: "./img/map/active.svg";
+				? this.prefix + "/img/map/remote.svg"
+				: this.prefix + "/img/map/active.svg";
 			const anchor = filters.backbone ? { x: 5, y: 5 } : { x: 7, y: 7 };
 
 			return {
@@ -141,7 +157,7 @@ class NodeMarker extends PureComponent {
 		if (type === "active")
 			return {
 				icon: {
-					url: "./img/map/active.svg",
+					url: this.prefix + "/img/map/active.svg",
 					anchor: { x: 7, y: 7 }
 				},
 				zIndex: 91
@@ -150,7 +166,7 @@ class NodeMarker extends PureComponent {
 		if (type === "potential-supernode")
 			return {
 				icon: {
-					url: "./img/map/potential-supernode.svg",
+					url: this.prefix + "/img/map/potential-supernode.svg",
 					anchor: { x: 14, y: 14 }
 				},
 				zIndex: 83
@@ -159,7 +175,7 @@ class NodeMarker extends PureComponent {
 		if (type === "potential-hub")
 			return {
 				icon: {
-					url: "./img/map/potential-hub.svg",
+					url: this.prefix + "/img/map/potential-hub.svg",
 					anchor: { x: 10, y: 10 }
 				},
 				zIndex: 82
@@ -168,7 +184,7 @@ class NodeMarker extends PureComponent {
 		if (type === "potential")
 			return {
 				icon: {
-					url: "/img/map/potential.svg",
+					url: this.prefix + "/img/map/potential.svg",
 					anchor: { x: 7, y: 7 }
 				},
 				zIndex: 81
@@ -176,7 +192,7 @@ class NodeMarker extends PureComponent {
 
 		return {
 			icon: {
-				url: "/img/map/dead.svg",
+				url: this.prefix + "/img/map/dead.svg",
 				anchor: { x: 5, y: 5 }
 			},
 			zIndex: 80

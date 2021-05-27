@@ -53,6 +53,7 @@ class MapView extends Component {
 	}
 
 	componentDidMount() {
+
 		this.keyDownHandler = this.handleKeyDown.bind(this);
 		this.keyUpHandler = this.handleKeyUp.bind(this);
 		window.addEventListener("keydown", this.keyDownHandler, false);
@@ -175,7 +176,7 @@ class MapView extends Component {
 				{this.renderLinks()}
 				{this.renderKiosks()}
 				{this.renderNodes()}
-				{this.renderNodeDetail()}
+			{this.renderNodeDetail()}
 				<Route
 					exact
 					path="/nodes/:nodeId/panoramas/:panoId"
@@ -205,7 +206,6 @@ class MapView extends Component {
 				});
 			}
 			const visible = !isFiltered || isSelected || neighborIsSelected;
-
 			return (
 				<NodeMarker
 					key={node.id}

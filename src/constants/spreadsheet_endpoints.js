@@ -2,3 +2,5 @@ export const sheetsNodeData = 'https://spreadsheets.google.com/feeds/cells/1FnKR
 export const sheetsLinksData = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZky64G3ynxhwh5QXZ3JLTPFXZ6-XTJmgz96ocdDwsbVIYjIqb0QDL8hxRGyq_Sl22sXbPh1bmFJY9/pubhtml';
 export const sheetsSectorData = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRoIfkaY0NUUW6z4nIIVIwufpYMBR2lYzETKSdkLfiuHm34eokO7URgegOoX5tmIKmUvQMXcmH46qSV/pubhtml';
 export const kioskData = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQJUXClGCrv8AaD68M1hOgHB3p2si7fmpTM8-dPhbOpvd7l0M0I6zJ47YTdhgY4EoWtQHlIIv9FA2ln/pubhtml';
+
+export const nodeSheetDictionary = {};
