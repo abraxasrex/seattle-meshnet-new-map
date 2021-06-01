@@ -14,7 +14,12 @@ import Gallery from "../Gallery";
 import { mapStyles } from "./styles";
 
 const DEFAULT_ZOOM = 11;
-const DEFAULT_CENTER = { lat: 40.72, lng: -73.9595798 };
+//nYC center lat lng
+// const DEFAULT_CENTER = { lat: 40.72, lng: -73.9595798 };
+// for seattle this is lat lng
+// 47.6062° N, 122.3321° W
+const DEFAULT_CENTER = { lat: 47.6062, lng: -122.3321 };
+
 
 const options = {
 	styles: mapStyles,
@@ -188,7 +193,8 @@ class MapView extends Component {
 
 	renderNodes() {
 		const { nodes, filters } = this.props;
-
+		let _nodes = Object.assign({}, nodes);
+		console.log("_nodes: ", _nodes);
 		// TODO: Refactor
 		const selectedIds = this.selectedNodeIds().reduce(
 			(idMap, nodeId) => ({ ...idMap, [nodeId]: true }),
@@ -205,6 +211,7 @@ class MapView extends Component {
 					}
 				});
 			}
+		//	const visible = true;
 			const visible = !isFiltered || isSelected || neighborIsSelected;
 			return (
 				<NodeMarker

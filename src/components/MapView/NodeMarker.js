@@ -26,6 +26,7 @@ class NodeMarker extends PureComponent {
 		const { icon, zIndex } = this.getMarkerProps();
 		const adjustedZ = this.getZIndex(zIndex);
 		const opacity = this.getOpacity();
+		console.log("ICON: ", icon, opacity, visible, lat, lng);
 		//console.log("icon!: ", icon);
 		//console.log("Props and Node: ", this.props, node);
 		return (
