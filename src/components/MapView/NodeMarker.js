@@ -10,7 +10,7 @@ class NodeMarker extends PureComponent {
 	render() {
 
 		// images will be in different relation if this is built...
-		const isBuild = false;
+		const isBuild = true;
 		this.prefix = '';
 	
 		if(isBuild) {
