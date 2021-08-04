@@ -37,11 +37,6 @@ import {sheetsNodeData, sheetsNodeDataSeattle} from '../constants/spreadsheet_en
 //   },
 
 
-import nodeData from "../data/nodes";
-import linkData from "../data/links";
-import sectorData from "../data/sectors";
-import kiosks from "../data/kiosks";
-
 const initialFilters = {
 	remote: true,
 	linkNYC: false,
@@ -54,40 +49,13 @@ const initialFilters = {
 	changelog: false
 };
 
-// const { nodes, links, sectors, nodesById } = addGraphData(
-// 	nodeData,
-// 	linkData,
-// 	sectorData
-// );
-
-async function processEntry(entity) {
-//	if(entity[0].isArray) {
-	let flattened = entity.flat(4);
-
-		return flattened;
-
-}
-
 async function populateSpreadsheet () {
 
 	return fetch(sheetsNodeDataSeattle)
 		.then(res => res.json())
-		.then(json => processEntry(json.feed.entry))
+		.then(json => json.feed.entry)
 		.then(jsonEntries => {
-			console.log("success: ", jsonEntries);
-		//	const jsonEntries = await(processEntry(json.feed.entry));
 
-			// let NYCrowMap = {
-			// 	1: "id",
-			// 	2: "name",
-			// 	3: "status",
-			// 	4: "coordinates",
-			// 	5: "requestDate",
-			// 	6: "installDate",
-			// 	7: "roofAccess",
-			// 	8: "notes",
-			// 	9: "panoramas"
-			// };
 			let rowMap = {
 				1: "id",
 				2: "name",
@@ -97,22 +65,15 @@ async function populateSpreadsheet () {
 				6: "notes"
 			}
 
-		//	let counter = 0;
 			let formattedEntry = {};
 			let formattedEntries = [];
 
-			// jsonEntries.forEach((entryItem, index)=> {
-			// 	formattedEntry[rowMap[entryItem.gs$cell.col]] = entryItem.content.$t;
-			// });
 
 			for(var i = 0; i < jsonEntries.length; i++) {
 				let entry = jsonEntries[i];
 				let column = entry.gs$cell.col;
 				let content = entry.content.$t;
-				// if(entry.gs$cell.col == 4) {
-				// 	entry.content.$t = entry.content.$t.split(',').map(str => parseFloat(str));
-				// 	console.log("ENTRY COORDS: ", entry);
-				// }
+
 				let newStatus = '';
 				if(column == 5) {
 					if(content == "confirmed" || content == "active") {
@@ -125,9 +86,6 @@ async function populateSpreadsheet () {
 				  content = newStatus;
 				}
 
-				if ( column == 6) {
-					// content += " hub";
-				}
 
 				if(column == 3) {
 					formattedEntry["coordinates"] = [parseFloat(content)];
@@ -138,55 +96,42 @@ async function populateSpreadsheet () {
 					formattedEntry[rowMap[column]] = content;
 				}
 
-
-
-				//if(jsonEntries[i].gs$cell.col == 9) {
 				if(column == 6) {
 
 					formattedEntry.requestDate = Date.now();
 					formattedEntry.installDate = Date.now();
 
-				//	formattedEntry["status"] = "active";
-
-					console.log("formatted entry!: ", formattedEntry);
 				    formattedEntries.push(formattedEntry);
 					formattedEntry = {};
 				}
 			}
-			console.log("formatted .... ", formattedEntries);
 			return formattedEntries;
 		})
 		.catch(err => {
+			console.log(err);
 			return err;
-			console.log(err)}
-		);
+		});
 
 }
 
-// const reducerWrapper = (customNodes) => {
-// 	let nodes = await populateSpreadsheet();
-	
-// }
 
 const reducerInit = async () => {
 	const nodeData = await populateSpreadsheet();
-	console.log("node data.. ", nodeData);
 	const { nodes, links, sectors, nodesById } = addGraphData(
 		nodeData,
-		linkData,
-		sectorData
+		[],
+		[]
 	);
 	
-	//custom_nodes = nodes;
 	return (
 		state = {
 			nodes,
 			links,
 			sectors,
-			kiosks: initialFilters.linkNYC === false ? [] : kiosks,
+			kiosks: initialFilters.linkNYC === false ? [] : [],
 			nodesById,
 			filters: initialFilters,
-			statusCounts: getCounts(nodeData, kiosks),
+			statusCounts: getCounts(nodeData, []),
 			showFilters: false
 		},
 		action
@@ -196,19 +141,19 @@ const reducerInit = async () => {
 				const newFilters = {
 					...state.filters,
 					[action.label]:
-						state.filters[action.label] === undefined
+						state.filters[action.label] === []
 							? false
 							: !state.filters[action.label]
 				};
 				if (action.label === "potential") {
-					const hasValue = state.filters["potential"] === undefined;
+					const hasValue = state.filters["potential"] === [];
 					const newValue = hasValue ? false : !state.filters["potential"];
 					newFilters["dead"] = newValue;
 				}
 				return {
 					...state,
 					filters: newFilters,
-					kiosks: newFilters.linkNYC === false ? [] : kiosks
+					kiosks: newFilters.linkNYC === false ? [] : []
 				};
 			case "TOGGLE_FILTERS":
 				return {
@@ -232,12 +177,6 @@ function addGraphData(nodes, links, sectors) {
 	const nodesById = {};
 
 	const linksByNodeId = {};
-	links.forEach(link => {
-		linksByNodeId[link.from] = linksByNodeId[link.from] || [];
-		linksByNodeId[link.to] = linksByNodeId[link.to] || [];
-		linksByNodeId[link.from].push(link);
-		linksByNodeId[link.to].push(link);
-	});
 
 	// Group nodes at same lat / lng
 	const mergedNodes = {};
@@ -255,36 +194,15 @@ function addGraphData(nodes, links, sectors) {
 		mergedNodes[key].push(node);
 	});
 
-	// Add status and nodes to links
-	links.forEach(link => {
-		link.fromNode = nodesById[link.from];
-		link.toNode = nodesById[link.to];
-		link.status = linkStatus(link);
-	});
 
 	// Add sectors to nodes
 	const sectorsByNodeId = {};
-	sectors.forEach(sector => {
-		sector.node = nodesById[sector.nodeId];
-		sectorsByNodeId[sector.nodeId] = sectorsByNodeId[sector.nodeId] || [];
-		sectorsByNodeId[sector.nodeId].push(sector);
-	});
 
 	nodes.forEach(node => {
 		node.sectors = sectorsByNodeId[node.id];
 
 		// Calculate connected nodes for each active node
 		const connectedNodes = [node.id];
-
-		links.forEach(link => {
-			if (link.from === parseInt(node.id, 10)) {
-				connectedNodes.push(link.to);
-			}
-
-			if (link.to === parseInt(node.id, 10)) {
-				connectedNodes.push(link.from);
-			}
-		});
 
 		node.connectedNodes = connectedNodes;
 		node.memberNodes = mergedNodes[geoKey(node)];
@@ -306,7 +224,7 @@ function getCounts(nodes, kiosks) {
 			counts["sector"] = (counts["sector"] || 0) + node.sectors.length;
 		}
 	});
-	counts.linkNYC = kiosks.length;
+	counts.linkNYC = 0;
 	return counts;
 }
 

@@ -1,3 +1,5 @@
+
+// calls to netlify are NYC--centric, can take out eventually.
 export function fetchNodes(dispatch) {
 	fetch("https://node-db.netlify.com/nodes.json")
 		.then(res => res.json())
